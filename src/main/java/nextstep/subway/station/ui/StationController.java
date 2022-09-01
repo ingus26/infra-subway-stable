@@ -3,6 +3,7 @@ package nextstep.subway.station.ui;
 import nextstep.subway.station.application.StationService;
 import nextstep.subway.station.dto.StationRequest;
 import nextstep.subway.station.dto.StationResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -18,6 +19,7 @@ import java.util.List;
 public class StationController {
     private StationService stationService;
 
+    @Autowired
     public StationController(StationService stationService) {
         this.stationService = stationService;
     }

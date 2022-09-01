@@ -4,6 +4,7 @@ import nextstep.subway.line.application.LineService;
 import nextstep.subway.line.dto.LineRequest;
 import nextstep.subway.line.dto.LineResponse;
 import nextstep.subway.line.dto.SectionRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -19,6 +20,7 @@ import java.util.List;
 public class LineController {
     private final LineService lineService;
 
+    @Autowired
     public LineController(final LineService lineService) {
         this.lineService = lineService;
     }
