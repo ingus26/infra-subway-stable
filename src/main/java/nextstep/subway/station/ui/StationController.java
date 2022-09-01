@@ -3,9 +3,7 @@ package nextstep.subway.station.ui;
 import nextstep.subway.station.application.StationService;
 import nextstep.subway.station.dto.StationRequest;
 import nextstep.subway.station.dto.StationResponse;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +16,7 @@ import java.util.List;
 public class StationController {
     private StationService stationService;
 
+    @Autowired
     public StationController(StationService stationService) {
         this.stationService = stationService;
     }
@@ -28,13 +27,11 @@ public class StationController {
         return ResponseEntity.created(URI.create("/stations/" + station.getId())).body(station);
     }
 
-    @Cacheable(value = "stations", key = "#id")
     @GetMapping(value = "/stations", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<StationResponse>> showStations() {
         return ResponseEntity.ok().body(stationService.findAllStations());
     }
 
-    @CacheEvict(value = "stations", key = "#id")
     @DeleteMapping("/stations/{id}")
     public ResponseEntity deleteStation(@PathVariable Long id) {
         stationService.deleteStationById(id);
