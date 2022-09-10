@@ -4,6 +4,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.station.dto.StationResponse;
 import java.time.LocalDateTime;
@@ -11,12 +15,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class LineResponse {
     private Long id;
     private String name;
     private String color;
     private List<StationResponse> stations;
 
+    // @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    // @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime createdDate;
@@ -24,18 +34,6 @@ public class LineResponse {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime modifiedDate;
-
-    public LineResponse() {
-    }
-
-    public LineResponse(Long id, String name, String color, List<StationResponse> stations, LocalDateTime createdDate, LocalDateTime modifiedDate) {
-        this.id = id;
-        this.name = name;
-        this.color = color;
-        this.stations = stations;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
-    }
 
     public static LineResponse of(Line line) {
         if(isEmpty(line)) {
@@ -52,29 +50,5 @@ public class LineResponse {
         return line.getStations().stream()
             .map(StationResponse::of)
             .collect(Collectors.toList());
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public List<StationResponse> getStations() {
-        return stations;
-    }
-
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public LocalDateTime getModifiedDate() {
-        return modifiedDate;
     }
 }

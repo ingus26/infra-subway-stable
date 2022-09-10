@@ -10,9 +10,8 @@ import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.StationRepository;
 import nextstep.subway.station.dto.StationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -22,6 +21,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class FavoriteService {
     private FavoriteRepository favoriteRepository;
     private StationRepository stationRepository;
@@ -33,11 +33,14 @@ public class FavoriteService {
     }
 
     public void createFavorite(LoginMember loginMember, FavoriteRequest request) {
-        Favorite favorite = new Favorite(loginMember.getId(), request.getSource(), request.getTarget());
+        Favorite favorite = Favorite.builder()
+                .memberId(loginMember.getId())
+                .sourceStationId(request.getSource())
+                .targetStationId(request.getTarget())
+                .build();
         favoriteRepository.save(favorite);
     }
 
-    @Cacheable(value = "favorite", key = "#id")
     public List<FavoriteResponse> findFavorites(LoginMember loginMember) {
         List<Favorite> favorites = favoriteRepository.findByMemberId(loginMember.getId());
         Map<Long, Station> stations = extractStations(favorites);
@@ -50,7 +53,6 @@ public class FavoriteService {
             .collect(Collectors.toList());
     }
 
-    @CacheEvict(value = "favorite", key = "#id")
     public void deleteFavorite(LoginMember loginMember, Long id) {
         Favorite favorite = favoriteRepository.findById(id).orElseThrow(RuntimeException::new);
         if (!favorite.isCreatedBy(loginMember.getId())) {

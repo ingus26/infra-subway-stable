@@ -1,5 +1,8 @@
 package nextstep.subway.map.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.Section;
 import nextstep.subway.station.domain.Station;
@@ -31,7 +34,7 @@ public class SubwayGraph extends WeightedMultigraph<Station, SectionEdge> {
     }
 
     private void addEdge(Section section, Line line) {
-        SectionEdge sectionEdge = new SectionEdge(section, line.getId());
+        SectionEdge sectionEdge = SectionEdge.builder().section(section).lineId(line.getId()).build();
         addEdge(section.getUpStation(), section.getDownStation(), sectionEdge);
         setEdgeWeight(sectionEdge, section.getDistance());
     }

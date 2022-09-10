@@ -1,24 +1,17 @@
 package nextstep.subway.map.domain;
 
+import lombok.*;
 import nextstep.subway.line.domain.Section;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@Builder
 public class SectionEdge extends DefaultWeightedEdge {
     private Section section;
     private Long lineId;
-
-    public SectionEdge(Section section, Long lineId) {
-        this.section = section;
-        this.lineId = lineId;
-    }
-
-    public Section getSection() {
-        return section;
-    }
-
-    public Long getLineId() {
-        return lineId;
-    }
 
     @Override
     protected Object getSource() {

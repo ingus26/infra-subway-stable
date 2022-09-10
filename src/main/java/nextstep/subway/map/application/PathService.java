@@ -8,11 +8,13 @@ import nextstep.subway.station.domain.Station;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class PathService {
     public SubwayPath findPath(List<Line> lines, Station source, Station target) {
         SubwayGraph graph = new SubwayGraph(SectionEdge.class);
@@ -29,6 +31,6 @@ public class PathService {
     private SubwayPath convertSubwayPath(GraphPath graphPath) {
         List<SectionEdge> edges = (List<SectionEdge>) graphPath.getEdgeList().stream().collect(Collectors.toList());
         List<Station> stations = graphPath.getVertexList();
-        return new SubwayPath(edges, stations);
+        return SubwayPath.builder().sectionEdges(edges).stations(stations).build();
     }
 }

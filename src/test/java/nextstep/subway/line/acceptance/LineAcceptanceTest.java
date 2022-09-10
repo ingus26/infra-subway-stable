@@ -218,6 +218,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     }
 
     public static void 지하철_노선_응답됨(ExtractableResponse<Response> response, ExtractableResponse<Response> createdResponse) {
+
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.as(LineResponse.class)).isNotNull();
     }

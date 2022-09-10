@@ -61,7 +61,7 @@ public class LineService {
     @CachePut(value = "line", key = "#id")
     public void updateLine(Long id, LineRequest lineUpdateRequest) {
         Line persistLine = lineRepository.findById(id).orElseThrow(RuntimeException::new);
-        persistLine.update(new Line(lineUpdateRequest.getName(), lineUpdateRequest.getColor()));
+        persistLine.update(Line.builder().id(id).name(lineUpdateRequest.getName()).color(lineUpdateRequest.getColor()).build());
     }
 
     @CacheEvict(value = "line", key = "#id")
@@ -72,7 +72,9 @@ public class LineService {
     public void addLineStation(Long lineId, SectionRequest request) {
         Line line = findLineById(lineId);
         Station upStation = stationService.findStationById(request.getUpStationId());
+        System.out.println("upStation: " + upStation.toString());
         Station downStation = stationService.findStationById(request.getDownStationId());
+        System.out.println("downStation: " + downStation.toString());
         line.addLineSection(upStation, downStation, request.getDistance());
     }
 

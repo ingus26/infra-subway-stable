@@ -1,33 +1,25 @@
 package nextstep.subway.station.domain;
 
+import lombok.*;
 import nextstep.subway.common.BaseEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Entity
+@Getter
+@Setter
+@ToString
+@Builder
 public class Station extends BaseEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique = true)
     private String name;
-
-    public Station() {
-    }
-
-    public Station(String name) {
-        this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
 
     @Override
     public boolean equals(Object o) {

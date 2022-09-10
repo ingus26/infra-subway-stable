@@ -30,9 +30,14 @@ public class MapService {
 
     @Cacheable(value = "path")
     public PathResponse findPath(Long source, Long target) {
+        System.out.println("findPath");
+
         List<Line> lines = lineService.findLines();
+        System.out.println("lines : " + lines.toString());
         Station sourceStation = stationService.findById(source);
+        System.out.println("sourceStation : " + sourceStation.toString());
         Station targetStation = stationService.findById(target);
+        System.out.println("targetStation : " + targetStation.toString());
         SubwayPath subwayPath = pathService.findPath(lines, sourceStation, targetStation);
 
         return PathResponseAssembler.assemble(subwayPath);

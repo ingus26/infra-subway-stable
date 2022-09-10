@@ -1,22 +1,16 @@
 package nextstep.subway.line.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class SectionRequest {
     private Long upStationId;
     private Long downStationId;
     private int distance;
-
-    private SectionRequest() {
-    }
-
-    public Long getUpStationId() {
-        return upStationId;
-    }
-
-    public Long getDownStationId() {
-        return downStationId;
-    }
-
-    public int getDistance() {
-        return distance;
-    }
 }

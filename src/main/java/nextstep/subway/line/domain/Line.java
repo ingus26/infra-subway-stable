@@ -1,5 +1,6 @@
 package nextstep.subway.line.domain;
 
+import lombok.*;
 import nextstep.subway.common.BaseEntity;
 import nextstep.subway.station.domain.Station;
 
@@ -10,7 +11,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Entity
+@Getter
+@Setter
+@Builder
 public class Line extends BaseEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,20 +26,12 @@ public class Line extends BaseEntity implements Serializable {
     private String color;
 
     @OneToMany(mappedBy = "line", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
-    private List<Section> sections = new ArrayList<>();
-
-    public Line() {
-    }
-
-    public Line(String name, String color) {
-        this.name = name;
-        this.color = color;
-    }
+    private final List<Section> sections = new ArrayList<>();
 
     public Line(String name, String color, Station upStation, Station downStation, int distance) {
         this.name = name;
         this.color = color;
-        sections.add(new Section(this, upStation, downStation, distance));
+        sections.add(Section.builder().upStation(upStation).downStation(downStation).distance(distance).build());
     }
 
     public void update(Line line) {
@@ -54,7 +52,7 @@ public class Line extends BaseEntity implements Serializable {
         if (isDownStationExisted) {
             updateDownStation(upStation, downStation, distance);
         }
-        sections.add(new Section(this, upStation, downStation, distance));
+        sections.add(Section.builder().upStation(upStation).downStation(downStation).distance(distance).build());
     }
 
     public void removeStation(Long stationId) {
@@ -74,27 +72,11 @@ public class Line extends BaseEntity implements Serializable {
     }
 
     public List<Station> getStations() {
-        if (sections.isEmpty()) {
+        if (sections == null || sections.isEmpty()) {
             return Arrays.asList();
         }
 
         return orderBySection();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public List<Section> getSections() {
-        return sections;
     }
 
     private List<Station> orderBySection() {
@@ -177,7 +159,7 @@ public class Line extends BaseEntity implements Serializable {
         Station newUpStation = downLineStation.getUpStation();
         Station newDownStation = upLineStation.getDownStation();
         int newDistance = upLineStation.getDistance() + downLineStation.getDistance();
-        sections.add(new Section(this, newUpStation, newDownStation, newDistance));
+        sections.add(Section.builder().upStation(newUpStation).downStation(newDownStation).distance(newDistance).build());
     }
 
     private Optional<Section> findDownStation(Long stationId) {

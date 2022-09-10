@@ -15,10 +15,10 @@ public class UnitTest {
         // given
         String newName = "구분당선";
 
-        Station upStation = new Station("강남역");
-        Station downStation = new Station("광교역");
+        Station upStation = Station.builder().name("강남역").build();
+        Station downStation = Station.builder().name("광교역").build();
         Line line = new Line("신분당선", "RED", upStation, downStation, 10);
-        Line newLine = new Line(newName, "GREEN");
+        Line newLine = Line.builder().name(newName).color("GREEN").build();
 
         // when
         line.update(newLine);
